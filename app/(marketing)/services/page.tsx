@@ -1,64 +1,32 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+import { fetchServices } from '@/lib/api';
+
 export default function ServicesCatalogPage() {
+  const [services, setServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+        const list = await fetchServices();
+        setServices(list);
+        setLoading(false);
+    };
+    load();
+  }, []);
+
+  // For visual consistency, we group them if they have a category field,
+  // otherwise we show a list or use our fallback grouping.
   const categories = [
     {
-      title: "HDS - Domestic Services",
+      title: "Active Platform Services",
       color: "border-brand-customer-red",
-      services: [
-        { code: "HDS-01", name: "House Cleaning", rule: "Both" },
-        { code: "HDS-02", name: "Deep Cleaning", rule: "Both" },
-        { code: "HDS-04", name: "Laundry & Ironing", rule: "Women Only" },
-        { code: "HDS-05", name: "Yard Cleaning", rule: "Men Only" },
-        { code: "HDS-06", name: "Garden Maintenance", rule: "Men Only" },
-        { code: "HDS-08", name: "Pool Cleaning", rule: "Men Only" },
-      ]
-    },
-    {
-      title: "CSS - Care & Support",
-      color: "border-brand-customer-red",
-      services: [
-        { code: "CSS-11", name: "Babysitting", rule: "Women Only" },
-        { code: "CSS-12", name: "Nanny – Stay In", rule: "Women Only" },
-        { code: "CSS-14", name: "Elderly Care – Home Visits", rule: "Both" },
-        { code: "CSS-16", name: "Disability Care Assistant", rule: "Both" },
-      ]
-    },
-    {
-      title: "HMS - Handyman & Repairs",
-      color: "border-brand-customer-red",
-      services: [
-        { code: "HMS-17", name: "General Handyman", rule: "Both" },
-        { code: "HMS-18", name: "Minor Electrical Repairs", rule: "Both" },
-        { code: "HMS-19", name: "Minor Plumbing Repairs", rule: "Both" },
-        { code: "HMS-20", name: "Painting (Small Jobs)", rule: "Men Only" },
-        { code: "HMS-21", name: "Furniture Assembly", rule: "Men Only" },
-      ]
-    },
-    {
-      title: "OPS - Outdoor & Property",
-      color: "border-brand-customer-red",
-      services: [
-        { code: "OPS-26", name: "Grass Cutting", rule: "Men Only" },
-        { code: "OPS-27", name: "Tree Trimming", rule: "Men Only" },
-        { code: "OPS-30", name: "Pest Control / Fumigation", rule: "Both" },
-      ]
-    },
-    {
-      title: "LLS - Convenience & Lifestyle",
-      color: "border-brand-customer-red",
-      services: [
-        { code: "LLS-31", name: "Mobile Car Wash", rule: "Both" },
-        { code: "LLS-35", name: "Moving Help", rule: "Men Only" },
-        { code: "LLS-37", name: "Pet Sitting", rule: "Both" },
-      ]
-    },
-    {
-      title: "TSS - Tech & Home Setup",
-      color: "border-brand-customer-red",
-      services: [
-        { code: "TSS-39", name: "TV Mounting", rule: "Both" },
-        { code: "TSS-40", name: "Wi-Fi & Router Setup", rule: "Both" },
-        { code: "TSS-41", name: "Computer & Phone Setup", rule: "Both" },
-      ]
+      services: services.map(s => ({
+          code: s.serviceCode,
+          name: s.serviceName || s.serviceCode,
+          rule: s.genderRule || "Both"
+      }))
     }
   ];
 
