@@ -1,4 +1,4 @@
-import { Info, Globe, Map, DollarSign } from "lucide-react";
+import { Info, Globe, Map, DollarSign, CheckCircle2 } from "lucide-react";
 
 export default function PricingPage() {
   return (
